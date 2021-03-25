@@ -1,0 +1,10 @@
+module.exports={
+  client:"mysql",
+  connection:{
+    host:"127.0.0.1",
+    user:"root",
+    password:"270427Meerim",
+    database:"toysycle_data",
+    charset:"utf8"
+  }
+}
