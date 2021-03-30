@@ -6,6 +6,8 @@ exports.up = function(knex) {
     table.string("description").notNullable();
     table.string("value").notNullable();
     table.integer("likes").notNullable().defaultTo(0);
+    table.json("categories").notNullable();
+    table.string("images").notNullable().defaultTo("No Picture");
     table.timestamp("updated_at").defaultTo(knex.fn.now());
     table
      .integer("user_id")

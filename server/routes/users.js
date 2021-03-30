@@ -10,14 +10,16 @@ router.get('/',(_req,res)=>{
      });
 });
 
-
 router.post('/',(req,res)=>{
   new Users({
     name:req.body.name,
     address:req.body.address,
     City:req.body.City,
     email:req.body.email,
-    phone:req.body.phone
+    phone:req.body.phone,
+    username:req.body.username,
+    images:req.body.images,
+    password:req.body.password
   })
   .save()
   .then(newUsers=>{

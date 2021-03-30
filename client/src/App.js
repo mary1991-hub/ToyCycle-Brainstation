@@ -1,97 +1,99 @@
 import React,{Component} from 'react';
-import Profile from './pages/Profile';
+// import Profile from './pages/Profile/Profile';
+// import Signup from './pages/Signup/Signup';
+import Posts from './pages/Posts/Posts'
 import axios from "axios";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  BrowserRouter,
+} from "react-router-dom";
 
-const baseUrl="http:localhost:8080";
-const loginUrl=`${baseUrl}/login`;
-const signupUrl=`${baseUrl}/signup`;
-const profilrUrl=`${baseUrl}/profile`;
+
+
+
+// const baseUrl="http://localhost:8080";
+// const loginUrl=`${baseUrl}/login`;
+// const signupUrl=`${baseUrl}/signup`;
+// const profilerUrl=`${baseUrl}/profile`;
+
 
 
 class App extends Component {
-  state ={
-    isSignedUp:false,
-    isLoggedIn:false,
-    isLoginError:false,
-    errorMessage:""
-  };
+  constructor(props) {
+    super(props);
 
-  login =(e)=>{
-  };
-
-  signup=(e)=>{
-    e.preventDefault();
-    console.log(this.signUpForm);
-    const {username, name, password}=this.signUpForm;
-
-    axios.post(signupUrl,{
-      username:username.value,
-      name:name.value,
-      password:password.value
-    })
-    .then(response=>{
-      console.log(response);
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
-  };
-
-
-  renderSignUp(){
-    return (
-      <div>
-        <h1>SignUp</h1>
-        <form ref={(form)=>(this.signUpForm=form)}>
-          <div className="form-group">
-            Username:<input type ="text"name="username"/>
-          </div>
-          <div className="form-group">
-            Name:<input type ="text"name="name"/>
-          </div>
-          <div className="form-group">
-            Password:<input type ="password"name="password"/>
-            <button className="button-primary" onClick={this.signup}>
-              Signup
-            </button>
-          </div>
-        </form>
-      </div>
-    ); 
+    this.state = {
+      users: null,
+      posts: null,
+    };
+    
   }
 
-  renderLogin(){
-    const{isLoginError, errorMessage}=this.state;
-    return (
-      <div>
-        <h1>Login</h1>
-        {isLoginError && <label style={{color:"red"}}>{errorMessage}</label>}
-        <form ref={(form)=>(this.loginForm=form)}>
-          <div className="form-group">
-            Username:<input type ="text"name="username"/>
-          </div>
-          <div className="form-group">
-            Password:<input type ="password"name="password"/>
-            <button className="button-primary" onClick={this.login}>
-             Login
-            </button>
-          </div>
-        </form>
-      </div>
-    ); 
-  };
+  componentDidMount() {
+    let one = axios.get(`http://localhost:8080/users`);
+    let two = axios.get(`http://localhost:8080/posts`);
+    axios
+      .all([one, two])
+      .then(
+        axios.spread((...responses) => {
+          console.log(responses);
+          this.setState({
+            users: responses.data,
+            posts: responses.data,
 
-  render(){
-    const {isLoggedIn ,isSignedUp}=this.state;
-
-    if(!isSignedUp)return this.renderSignUp();
-    if(!isLoggedIn)return this.renderLogin();
-
-    return(
-      <div>
-        <Profile/>
-      </div>
-    );
+          });
+        })
+      )
+      .catch((errors) => { });
   }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.match !== undefined && prevProps.match.params.id !== this.props.match.params) {
+      let one = axios.get(`http://localhost:8080/users`);
+      let two = axios.get(`http://localhost:8080/users/posts`);
+      axios
+        .all([one, two])
+        .then(
+          axios.spread((...responses) => {
+            this.setState({
+              users: responses[0].data,
+              posts: responses[1].data,
+            });
+          })
+        )
+        .catch((errors) => { });
+    }
+  }
+
+    render() {
+      if (this.state.posts !== null && this.state.users !== null) {
+      return (
+        <div className="App">
+          <BrowserRouter>
+          <Router className="App">
+            {/* <Signup /> */}
+            <Switch>
+              <Redirect from='/home' to='/'/>
+              <Route path='/' exact
+                  render={
+                      <Posts posts={this.state.posts} />} />
+            </Switch>
+          </Router>
+        </BrowserRouter>
+        </div>
+      );
+    }else {
+      return (
+      <div>
+        <h1>
+          LOADING
+        </h1>
+          </div>
+        )
+      }
+    }
 }
-export default App;
+  export default App;

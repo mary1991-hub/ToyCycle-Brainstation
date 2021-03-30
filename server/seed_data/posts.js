@@ -1,26 +1,44 @@
 module.exports=[
   {
-    name:"Wood puzzle ",
-    description:"Fun wood puzzle and game with magnetic truck to pick up the cars. ",
+    name:"Star Wars the Mandalorian the Child Plush Figure",
+    description:"Fully embrace the cuteness of the 50-year-old Yoda species with this adorable 11-inch plush toy.",
+    value:"$$",
+    likes:3,
+    categories:JSON.stringify(["5-7 years","3-5years","2-4 years"])
+  },
+  {
+    name:"LEGO DUPLO Tractor & Farm Animal Care",
+    description:"There are farm buildings and a tractor, plus a pig, sheep, horse, dog, hen, rooster and cows to care for.",
+    value:"$$",
+    likes:5,
+    categories:JSON.stringify(["5-7 years","3-5years","2-4 years"])
+  },
+  {
+    name:" Toy Crane Truck with Lights and Sounds",
+    description:"This incredibly detailed toy truck for kids includes several moving parts such as opening cab doors, a hood that lifts up, and fold-out side legs for extra support on those tough jobs!",
+    value:"$$",
+    likes:3,
+    categories:JSON.stringify(["5-7 years","3-5years","2-4 years"])
+  },
+  {
+    name:"Wooden Blocks ",
+    description:"This set of wooden building blocks includes 150 durable wooden blocks in 7 different colours and 7 shapes. This classic educational toy provides hours of hands on, screen free play time.",
     value:"$",
     likes:2,
+    categories:JSON.stringify(["5-7 years","3-5years","2-4 years"])
   },
   {
-    name:"Disney character toys",
-    description:"A random collection of Disney figurines.",
+    name:"Froggie Dominoes 60 Pieces ",
+    description:"These dominoes for toddlers can be placed in various paths allowing kids' imaginations to run wild. Unlike classic toddler dominos that have only colored square blocks, this domino set includes alphabet blocks.",
     value:"$$",
-    likes:5
+    likes:7,
+    categories:JSON.stringify(["5-7 years","3-5years","2-4 years"])
   },
   {
-    name:"Train",
-    description:"Two switchers , dummies' for display CN heritage paint schemes. 7944 is Athearn, 7944 is a shell on a butchered frame.",
-    value:"$$",
-    likes:3
-  },
-  {
-    name:"Kids Play Kitchen",
-    description:"Play kitchen with three toy pots and a few food accessories. ",
+    name:"Wooden Table Top Football/Soccer ",
+    description:"Enjoy a fast-paced game of foosball with this classic table. Offers all the thrills of a traditional foosball table - including pull shots, rollovers, and pull kicks - but is small enough to fit on most tables and desks, and is compact for storage.",
     value:"$",
-    likes:2
+    likes:2,
+    categories:JSON.stringify(["5-7 years","3-5years","2-4 years"])
   },
 ]

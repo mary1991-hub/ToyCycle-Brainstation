@@ -13,7 +13,7 @@ router.get('/',(_req,res)=>{
 
 router.post('/',(req,res)=>{
   Users
-     .where({id:req.body.usersId})
+     .where({id:req.body.user_id})
      .fetch()
      .then(()=>{
         new Posts({
@@ -21,7 +21,8 @@ router.post('/',(req,res)=>{
           description:req.body.description,
           value:req.body.value,
           likes:req.body.likes,
-          user_id:req.body.usersId
+          user_id:req.body.user_id,
+          categories:req.body.categories
       })
       .save()
       .then(newPosts=>{
