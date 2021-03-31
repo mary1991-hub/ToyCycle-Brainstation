@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
-import Profile from './pages/Profile';
 import axios from "axios";
+import HomePage from '../HomePage/HomePage'
 
 const baseUrl="http:localhost:8080";
 const loginUrl=`${baseUrl}/login`;
@@ -32,7 +32,7 @@ class Signup extends Component {
     axios.post(loginUrl,{
       username:username.value,
       password:password.value
-    }).them((response)=>{
+    }).then((response)=>{
       if(response.data.error){
        this.setState({
          isLoginError:true,
@@ -58,11 +58,16 @@ class Signup extends Component {
   signup=(e)=>{
     e.preventDefault();
     console.log(this.signUpForm);
-    const {username, name, password}=this.signUpForm;
+    const {username, name,address,City,email,phone,image,password}=this.signUpForm;
 
     axios.post(signupUrl,{
       username:username.value,
       name:name.value,
+      address:address.value,
+      City:City.value,
+      email:email.value,
+      phone:phone.value,
+      image:image.value,
       password:password.value
     })
     .then(response=>{
@@ -144,7 +149,7 @@ class Signup extends Component {
 
     return(
       <div>
-        <Profile/>
+        <HomePage/>
       </div>
     );
   }

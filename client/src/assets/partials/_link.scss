@@ -1,0 +1,15 @@
+@use './variables' as *;
+@use './mixins' as *;
+.link {
+    text-decoration: none;
+    color: $cloud;
+    width: 9.7rem;
+    @include tablet {
+        width: 3rem;
+        margin-right: 1.5rem;
+    }
+    @include desktop {}
+    &:hover {
+        text-decoration: underline;
+    }
+}

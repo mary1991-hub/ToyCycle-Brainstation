@@ -1,13 +1,15 @@
 const express = require("express");
 const app = express();
 const path = require('path');
+const cors=require ('cors');
 const fileUpload = require('express-fileupload');
 const bodyParser=require("body-parser");
 const PORT = process.env.PORT || 8080;
-const jwt= require ("jsonwebtoken")
+// const jwt= require ("jsonwebtoken")
 const usersRouter=require('./routes/users');
 const postsRouter=require('./routes/posts');
 const signupRouter=require('./routes/signup');
+
 
 
 app.use(cors());

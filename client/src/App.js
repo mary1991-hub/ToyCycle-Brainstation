@@ -1,7 +1,8 @@
 import React,{Component} from 'react';
 // import Profile from './pages/Profile/Profile';
-// import Signup from './pages/Signup/Signup';
-import Posts from './pages/Posts/Posts'
+import Signup from './pages/Signup/Signup';
+import HomePage from './pages/HomePage/HomePage'
+import PostDetails from './components/PostDetails/PostDetails';
 import axios from "axios";
 import {
   BrowserRouter as Router,
@@ -10,15 +11,6 @@ import {
   Redirect,
   BrowserRouter,
 } from "react-router-dom";
-
-
-
-
-// const baseUrl="http://localhost:8080";
-// const loginUrl=`${baseUrl}/login`;
-// const signupUrl=`${baseUrl}/signup`;
-// const profilerUrl=`${baseUrl}/profile`;
-
 
 
 class App extends Component {
@@ -39,10 +31,10 @@ class App extends Component {
       .all([one, two])
       .then(
         axios.spread((...responses) => {
-          console.log(responses);
+          console.log(responses[1].data);
           this.setState({
-            users: responses.data,
-            posts: responses.data,
+            users: responses[0].data,
+            posts: responses[1].data,
 
           });
         })
@@ -64,7 +56,9 @@ class App extends Component {
             });
           })
         )
-        .catch((errors) => { });
+        .catch((errors) => { 
+          console.log(errors);
+        });
     }
   }
 
@@ -76,10 +70,15 @@ class App extends Component {
           <Router className="App">
             {/* <Signup /> */}
             <Switch>
-              <Redirect from='/home' to='/'/>
-              <Route path='/' exact
-                  render={
-                      <Posts posts={this.state.posts} />} />
+            <Signup path='/signup' exact render= {() => <Signup />}/>
+            <Redirect from='/home' to='/'/>
+            <Route path='/' exact
+                render={(props) => (
+                    <HomePage {...props} posts={this.state.posts} />
+                )} 
+            />
+            <Route  path="/posts/:postsId" exact
+            render={(props) => (<PostDetails {...props} posts={this.state.posts.find(el => el.id === props.match.params.postsId)}/>)} />
             </Switch>
           </Router>
         </BrowserRouter>
