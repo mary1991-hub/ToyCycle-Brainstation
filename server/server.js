@@ -5,10 +5,11 @@ const cors=require ('cors');
 const fileUpload = require('express-fileupload');
 const bodyParser=require("body-parser");
 const PORT = process.env.PORT || 8080;
-// const jwt= require ("jsonwebtoken")
+const jwt= require ("jsonwebtoken")
 const usersRouter=require('./routes/users');
 const postsRouter=require('./routes/posts');
 const signupRouter=require('./routes/signup');
+const Users = require("./models/users");
 
 
 
@@ -50,28 +51,22 @@ function getToken(req) {
   return req.headers.authorization.split(" ")[1];
 }
 
-app.post('/login', function(req, res) {
-  User.findOne({
-    name: req.body.name
-  }, function(err, user) {
-    if (err) throw err;
-
-    if (!user) {
-      res.send({success: false, msg: 'Login failed. User not found.'});
-    } else {
-      // check if password matches
-      user.comparePassword(req.body.password, function (err, isMatch) {
-        if (isMatch && !err) {
-          // if user is found and password is right create a token
-          var token = jwt.encode(user, config.secret);
-          // return the information including token as JSON
-          res.json({success: true, token: 'JWT ' + token});
-        } else {
-          res.send({success: false, msg: 'Authentication failed. Wrong password.'});
-        }
-      });
-    }
-  });
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  const user = Users[username];
+  if (user && user.password === password) {
+    res.json({ token: jwt.sign({ name: user.name }, jsonSecretKey) });
+  } else {
+    res.json({
+      token: "",
+      error: {
+        message: "Error logging in. Invalid username/password combination.",
+      },
+    });
+  }
+});
+app.get("/profile", (req, res) => {
+  res.json(req.decode);
 });
 
 app.listen(PORT,()=>{

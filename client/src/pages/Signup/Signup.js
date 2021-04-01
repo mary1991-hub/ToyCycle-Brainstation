@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import axios from "axios";
-import HomePage from '../HomePage/HomePage'
+import Profile from '../Profile/Profile';
 
 const baseUrl="http:localhost:8080";
 const loginUrl=`${baseUrl}/login`;
@@ -64,7 +64,7 @@ class Signup extends Component {
       username:username.value,
       name:name.value,
       address:address.value,
-      City:City.value,
+      city:City.value,
       email:email.value,
       phone:phone.value,
       image:image.value,
@@ -106,9 +106,9 @@ class Signup extends Component {
           <div className="form-group">
             Phone:<input type ="text"name="phone"/>
           </div>
-          <div className="form-group">
-            Image:<input type ="upload"name="image"/>
-          </div>
+          <div class="form-group">
+                Profile Image:<input class="form-control" type="file" name="uploaded_image" accept=""/>
+            </div>
           <div className="form-group">
             Password:<input type ="password"name="password"/>
             <button className="button-primary" onClick={this.signup}>
@@ -149,7 +149,7 @@ class Signup extends Component {
 
     return(
       <div>
-        <HomePage/>
+        <Profile/>
       </div>
     );
   }

@@ -1,0 +1,86 @@
+@use '../../assets/partials/variables' as *;
+@use '../../assets/partials/mixins' as *;
+
+
+.offer-module {
+    @include flex-row;
+    flex-wrap: wrap;
+    position: fixed;
+    top: 0;
+    background: $white;
+    @include tablet {
+        top: 11.563rem;
+        height: 16.375rem;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 39.188rem;
+        box-shadow: 0px 2px 5px rgba(19, 24, 44, 0.1);
+        border-radius: 3px;
+    }
+
+    &__close {
+        background-image: url("../../assets/images/close.svg");
+        background-color: $white;
+        background-position: center;
+        position: absolute;
+        border: none;
+        left: 90%;
+        top: 3%;
+    }
+
+    &__header {
+        @include h1-page-header;
+        margin: 3.75rem 1rem 1rem;
+    }
+
+    &__message {
+        @include body-med;
+        margin: 0 1rem;
+    }
+
+    &__btn {
+        @include flex-row;
+        align-self: flex-end;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0 1rem 1.5rem;
+        @include tablet{
+            justify-content: flex-end;
+            margin: 0 4rem 2.5rem 0;
+        }
+        &-cancel {
+            width: 48%;
+            height: 2.375rem;
+            border-radius: 20px;
+            border: 1px solid #bdc5d5;
+            background: $white;
+            @include tablet {
+                width: 4.438rem;
+            }
+        }
+        &-delete {
+            width: 48%;
+            height: 2.375rem;
+            border-radius: 20px;
+            border: none;
+            background: #c94515;
+            color: $white;
+            @include tablet {
+                width: 4.438rem;
+                margin-left: 1rem;
+            }
+        }
+    }
+
+    &--grey-background{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $black;
+        opacity: 0.7;
+
+    }
+}

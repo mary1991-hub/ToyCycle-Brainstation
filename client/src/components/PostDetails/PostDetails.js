@@ -1,45 +1,91 @@
 import React from 'react';
 import axios from 'axios';
 import backArrow from '../../assets/Icons/arrow_back-24px.svg';
-import edit from "../../assets/Icons/edit-25px.svg";
+import OfferModule from '../OfferModule/OfferModule';
 import { Link } from 'react-router-dom';
 
 class PostDetails extends React.Component{
   state = {
       posts: null,
+      users:null,
+      display:false
   }
+
+  
   componentDidMount(){
-      axios.get(`http://localhost:8080/posts/${this.props.parentProps.match.params.postsId}`)
+    axios.get(`http://localhost:8080/posts/${this.props.match.params.postsId}`)
       .then(
-          response => {
+         response => {
               console.log(response);
             this.setState({
               posts: response,
             });
           })
   }
-  render(){
+
+//   componentDidMount(){
+//     axios.get(`http://localhost:8080/users/${this.props.match.params.usersId}`)
+//       .then(
+//          response => {
+//               console.log(response);
+//             this.setState({
+//               users: response,
+//             });
+//           })
+//   }
+  renderOfferModule = () => {
+    this.setState({
+        display: true,
+    })
+}
+
+cancelOfferModule = () => {
+    this.setState({
+        display: false,
+    })
+}
+
+proposeOfferModule = () => {
+    this.setState({
+        display: false,
+    })
+
+}
+
+  render()
+  {console.log(this.props);
   if(this.state.posts !== null) {
-  const singlePost = this.state.post;
+  const singlePost = this.state.posts;
   console.log(singlePost);
       return (
           <div className="details">
               <div className="details__namearrow">
                   <Link className="details__link" to={'/'}>
                       <div className='details__box'>
-                          <img className="details__arrow" alt="back arrow" src={backArrow} />
-                          <p className="details__name">{singlePost.data.name}</p>
+                          <img className="details__arrow" alt="back arrow" src={backArrow} />    
                       </div>
                   </Link>
-                  <Link className="details__button" to={`/warehouses/${singlePost.data.id}/edit-warehouse`}>
-                      <div className='details__button-box'><img src={edit} alt={"more"} className="details__button-edit" />
-                      </div>
-                      <p className="details__button-name">Edit</p>
-                  </Link>
+                  <div className='details__box'>
+                  <p className="details__name">{singlePost.data.name}</p>
+                    </div>
+                  <div className='details__box'>
+                  <img src={`http://localhost:8080/images/${singlePost.data.images}`}/>
+                    </div>
+                    <div className='details__box'>
+                          <p className="details__name">Details: {singlePost.data.description}</p>
+                    </div>
+                    <div className='details__box'>
+                          <p className="details__name">Condition: {singlePost.data.tradeCondition}</p>
+                    </div>
+                    <div className='details__box'>
+                          <p className="details__name">❤️ {singlePost.data.likes}</p>
+                    </div>
+                    <div className='details__box'>
+                          <p className="details__name">Value: {singlePost.data.value}</p>
+                    </div>
+                    <button onClick={this.renderOfferModule} className="offer-module__btn-offer">TRADE</button>
+                {this.state.display && <OfferModule posts={singlePost.data} proposeOfferModule={this.proposeOfferModule} cancelOfferModule={this.cancelOfferModule}/>}
               </div>
-              {/* <div className="details__namearrow">
-                  <PostCard postData={singlePost} />
-              </div> */}
           </div >
       ) 
   } else{
