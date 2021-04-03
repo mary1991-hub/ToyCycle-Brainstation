@@ -1,157 +1,98 @@
-import React,{Component} from 'react';
+import React, { Component } from "react";
 import axios from "axios";
-import Profile from '../Profile/Profile';
+import Profile from "../Profile/Profile";
+import { Redirect } from "react-router";
+import { TextInputField, Button, Pane, Heading } from "evergreen-ui";
+import { Formik } from "formik";
 
-const baseUrl="http:localhost:8080";
-const loginUrl=`${baseUrl}/login`;
-const signupUrl=`${baseUrl}/signup`;
-const profilerUrl=`${baseUrl}/profile`;
-
+const baseUrl = "http://localhost:8080";
+const loginUrl = `${baseUrl}/login`;
+const signupUrl = `${baseUrl}/signup`;
+const profilerUrl = `${baseUrl}/profile`;
 
 class Signup extends Component {
-  state ={
-    isSignedUp:false,
-    isLoggedIn:false,
-    isLoginError:false,
-    errorMessage:""
+  state = {
+    isSignedUp: false,
+    errorMessage: "",
   };
 
-  login =(e)=>{
-    e.preventDefault();
-    const {username,password}=this.loginForm;
-
-    if (username.value===""|| password.value===""){
-      this.setState({
-        isLoginError:true,
-        errorMessage:"Please provide a username and password"
-      });
-
-      return;
-    }
-
-    axios.post(loginUrl,{
-      username:username.value,
-      password:password.value
-    }).then((response)=>{
-      if(response.data.error){
-       this.setState({
-         isLoginError:true,
-         errorMessage:response.data.error.massage
-       })
-
-       return;
-      }
-
-      sessionStorage.setItem('authToken',response.data.token);
-
-      this.setState({
-        isLoggedIn:true,
-        isLoginError:false
-      })
-
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
-  };
-
-  signup=(e)=>{
+  signup = (e) => {
     e.preventDefault();
     console.log(this.signUpForm);
-    const {username, name,address,City,email,phone,image,password}=this.signUpForm;
+    const {
+      username,
+      name,
+      address,
+      city,
+      email,
+      phone,
+      uploaded_image,
+      password,
+    } = this.signUpForm;
 
-    axios.post(signupUrl,{
-      username:username.value,
-      name:name.value,
-      address:address.value,
-      city:City.value,
-      email:email.value,
-      phone:phone.value,
-      image:image.value,
-      password:password.value
+    console.log(uploaded_image);
+    const data = new FormData();
+    data.append("username", username.value);
+    data.append("name", name.value);
+    data.append("address", address.value);
+    data.append("City", city.value);
+    data.append("email", email.value);
+    data.append("phone", phone.value);
+    data.append("images", uploaded_image.files[0]);
+    data.append("password", password.value);
+    axios({
+      url: signupUrl,
+      method: "POST",
+      headers: { "Content-Type": "multipart/form-data" },
+      data: data,
     })
-    .then(response=>{
-      if(response.status===200){
-        this.setState({
-          isSignedUp:true
-        });
-      }
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            isSignedUp: true,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-
-  renderSignUp(){
+  renderSignUp() {
     return (
-      <div>
-        <h1>SignUp</h1>
-        <form ref={(form)=>(this.signUpForm=form)}>
-          <div className="form-group">
-            Username:<input type ="text"name="username"/>
-          </div>
-          <div className="form-group">
-            Name:<input type ="text"name="name"/>
-          </div>
-          <div className="form-group">
-            Address:<input type ="text"name="address"/>
-          </div>
-          <div className="form-group">
-            City:<input type ="text"name="city"/>
-          </div>
-          <div className="form-group">
-            Email:<input type ="text"name="email"/>
-          </div>
-          <div className="form-group">
-            Phone:<input type ="text"name="phone"/>
-          </div>
-          <div class="form-group">
-                Profile Image:<input class="form-control" type="file" name="uploaded_image" accept=""/>
-            </div>
-          <div className="form-group">
-            Password:<input type ="password"name="password"/>
+      <Pane display="flex" alignItems="center" justifyContent="center">
+        <Pane border="default" width={300} padding={20}>
+          <Heading size={700}>SignUp</Heading>
+          <form ref={(form) => (this.signUpForm = form)}>
+            <TextInputField label="Username:" type="text" name="username" />
+            <TextInputField label="Name:" type="text" name="name" />
+            <TextInputField label="Address:" type="text" name="address" />
+            <TextInputField label="City:" type="text" name="city" />
+            <TextInputField label="Email:" type="text" name="email" />
+            <TextInputField label="Phone:" type="text" name="phone" />
+            <TextInputField
+              label="Profile Image:"
+              class="form-control"
+              type="file"
+              name="uploaded_image"
+              accept=""
+            />
+            <TextInputField label="Password:" type="password" name="password" />
             <button className="button-primary" onClick={this.signup}>
               Signup
             </button>
-          </div>
-        </form>
-      </div>
-    ); 
+          </form>
+        </Pane>
+      </Pane>
+    );
   }
 
-  renderLogin(){
-    const{isLoginError, errorMessage}=this.state;
-    return (
-      <div>
-        <h1>Login</h1>
-        {isLoginError && <label style={{color:"red"}}>{errorMessage}</label>}
-        <form ref={(form)=>(this.loginForm=form)}>
-          <div className="form-group">
-            Username:<input type ="text"name="username"/>
-          </div>
-          <div className="form-group">
-            Password:<input type ="password"name="password"/>
-            <button className="button-primary" onClick={this.login}>
-             Login
-            </button>
-          </div>
-        </form>
-      </div>
-    ); 
-  };
+  render() {
+    const { isSignedUp } = this.state;
 
-  render(){
-    const {isLoggedIn ,isSignedUp}=this.state;
+    if (!isSignedUp) return this.renderSignUp();
 
-    if(!isSignedUp)return this.renderSignUp();
-    if(!isLoggedIn)return this.renderLogin();
-
-    return(
-      <div>
-        <Profile/>
-      </div>
-    );
+    return <Redirect to="/login" />;
   }
 }
 export default Signup;

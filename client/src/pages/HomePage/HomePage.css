@@ -1,0 +1,16 @@
+
+.posts-cards{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  margin: auto;
+  width: 1300px;
+}
+
+.posts-container{
+  margin: auto;
+  width: 1300px;
+  display:flex ;
+  justify-content:space-between;
+  padding-left: 20px;
+  padding-right: 110px;
+}

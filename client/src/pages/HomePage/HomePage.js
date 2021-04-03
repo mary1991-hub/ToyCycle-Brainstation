@@ -1,27 +1,23 @@
-// import { Link } from "react-router-dom";
 import SinglePost from "../../components/SinglePost/SinglePost";
-
+import { useAuthUser } from "../../utils/auth";
+import "./HomePage.css";
+import { Button, Pane, Heading, SearchInput } from "evergreen-ui";
 
 const HomePage = (props) => {
-
   return (
-    <section>
-      <div className="home-page">
-        <div className="home-page__header">
-          <h1 className="home-page__title">Posts</h1>
-          <div className="home-page__cta">
-            <input className="home-page__cta-search" image="" type="text" placeholder="Search..." />
-          </div>
-        </div>
+    <Pane>
+      <Pane className="posts-container">
+        <Heading size={900}>Posts</Heading>
+        <SearchInput type="text" placeholder="Search..." />
+      </Pane>
+
+      <div className="posts-cards">
+        {props.posts &&
+          props.posts.map((post) => {
+            return <SinglePost {...props} posts={post} />;
+          })}
       </div>
-      <div>
-        {props.posts && props.posts.map((post) => {
-          return (
-            <SinglePost{...props} posts={post}/>
-          );
-        })}
-      </div>
-    </section>
+    </Pane>
   );
 };
 export default HomePage;

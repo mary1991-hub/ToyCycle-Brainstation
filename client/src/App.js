@@ -1,17 +1,19 @@
-import React,{Component} from 'react';
+import React, { Component } from "react";
 // import Profile from './pages/Profile/Profile';
-import Signup from './pages/Signup/Signup';
-import HomePage from './pages/HomePage/HomePage'
-import PostDetails from './components/PostDetails/PostDetails';
+import Signup from "./pages/Signup/Signup";
+import Login from "./pages/Login/Login";
+import LoginRequired from "./pages/Login/LoginRequired";
+import HomePage from "./pages/HomePage/HomePage";
+import MainPage from "./components/MainPage/MainPage";
+import PostDetails from "./components/PostDetails/PostDetails";
 import axios from "axios";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
   BrowserRouter,
 } from "react-router-dom";
-
+import Logout from "./pages/Login/Logout";
 
 class App extends Component {
   constructor(props) {
@@ -21,7 +23,6 @@ class App extends Component {
       users: null,
       posts: null,
     };
-    
   }
 
   componentDidMount() {
@@ -35,15 +36,17 @@ class App extends Component {
           this.setState({
             users: responses[0].data,
             posts: responses[1].data,
-
           });
         })
       )
-      .catch((errors) => { });
+      .catch((errors) => {});
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match !== undefined && prevProps.match.params.id !== this.props.match.params) {
+    if (
+      this.props.match !== undefined &&
+      prevProps.match.params.id !== this.props.match.params
+    ) {
       let one = axios.get(`http://localhost:8080/users`);
       let two = axios.get(`http://localhost:8080/users/posts`);
       axios
@@ -56,43 +59,75 @@ class App extends Component {
             });
           })
         )
-        .catch((errors) => { 
+        .catch((errors) => {
           console.log(errors);
         });
     }
   }
 
-    render() {
-      if (this.state.posts !== null && this.state.users !== null) {
+  render() {
+    if (this.state.posts !== null && this.state.users !== null) {
       return (
         <div className="App">
           <BrowserRouter>
-          <Router className="App">
-            {/* <Signup /> */}
-            <Switch>
-            <Signup path='/signup' exact render= {() => <Signup />}/>
-            <Redirect from='/home' to='/'/>
-            <Route path='/' exact
-                render={(props) => (
-                    <HomePage {...props} posts={this.state.posts} />
-                )} 
-            />
-            <Route  path="/posts/:postsId" exact
-            render={(props) => (<PostDetails {...props} posts={this.state.posts.find(el => el.id === props.match.params.postsId)}/>)} />
-            </Switch>
-          </Router>
-        </BrowserRouter>
+            <Router className="App">
+              <Switch>
+                <MainPage
+                  path="/"
+                  exact
+                  render={() => (
+                    <LoginRequired>
+                      <MainPage />
+                    </LoginRequired>
+                  )}
+                />
+                <Route
+                  path="/signup"
+                  exact
+                  render={() => (
+                    <LoginRequired>
+                      <Signup />
+                    </LoginRequired>
+                  )}
+                />
+                <Route path="/login" exact render={() => <Login />} />
+                <Route path="/logout" exact render={() => <Logout />} />
+                {/* <Redirect from='/home' to='/'/> */}
+                <Route
+                  path="/posts"
+                  exact
+                  render={(props) => (
+                    <LoginRequired>
+                      <HomePage {...props} posts={this.state.posts} />
+                    </LoginRequired>
+                  )}
+                />
+                <Route
+                  path="/posts/:postsId"
+                  exact
+                  render={(props) => (
+                    <LoginRequired>
+                      <PostDetails
+                        {...props}
+                        posts={this.state.posts.find(
+                          (el) => el.id === props.match.params.postsId
+                        )}
+                      />
+                    </LoginRequired>
+                  )}
+                />
+              </Switch>
+            </Router>
+          </BrowserRouter>
         </div>
       );
-    }else {
+    } else {
       return (
-      <div>
-        <h1>
-          LOADING
-        </h1>
-          </div>
-        )
-      }
+        <div>
+          <h1>LOADING</h1>
+        </div>
+      );
     }
+  }
 }
-  export default App;
+export default App;

@@ -1,21 +1,32 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import "./SinglePost.scss";
+import { TextInputField, Button, Pane, Heading, Card } from "evergreen-ui";
 
 class SinglePost extends Component {
+  render() {
+    return (
+      <Card border="default" width={304} margin={20}>
+        <Pane>
+          <Link to={`/posts/${this.props.posts.id}`}>
+            <img
+              width={300}
+              src={`http://localhost:8080/images/${this.props.posts.images}`}
+            />
+          </Link>
+        </Pane>
 
-    render() {
-        return (
-            <li key={this.props.posts.id} className="postCard">
-                <Link to={`/posts/${this.props.posts.id}`} className="">
-                <img src={`http://localhost:8080/images/${this.props.posts.images}`}/>
-                </Link>
-                <Link to={`/posts/${this.props.posts.id}`} className="">
-                    <p>{this.props.posts.name}</p>
-                </Link>
-            </li>
-        );
-    }
+        <Pane padding={10}>
+          <Link
+            to={`/posts/${this.props.posts.id}`}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            {this.props.posts.name}
+          </Link>
+        </Pane>
+      </Card>
+    );
+  }
 }
 
 export default SinglePost;
