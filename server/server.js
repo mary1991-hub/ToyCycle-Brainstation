@@ -14,41 +14,41 @@ const Users = require("./models/users");
 
 app.use(cors());
 
+const jsonSecretKey = "secret";
+function getToken(req) {
+  console.log(req.headers.authorization);
+  if (req.headers.authorization) {
+    return req.headers.authorization.split(" ")[1];
+  } else {
+    return null;
+  }
+}
+app.use((req, res, next) => {
+  const token = getToken(req);
+  if (token) {
+    console.log(token);
+    if (jwt.verify(token, jsonSecretKey)) {
+      req.authUser = jwt.decode(token);
+      next();
+    } else {
+      res.status(403).json({ error: "Not Authorized." });
+    }
+  } else {
+    next();
+  }
+});
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
 
-app.use("/users", usersRouter);
-app.use("/offers", offersRouter);
 app.use("/posts", postsRouter);
 app.use("/signup", signupRouter);
+app.use("/users", usersRouter);
+app.use("/offers", offersRouter);
 // app.use('/profile/:id',signupRouter.profile);
-
-const jsonSecretKey = "secret";
-app.use((req, res, next) => {
-  if (req.url === "/signup" || req.url === "/login") next();
-  else {
-    const token = getToken(req);
-    console.log(typeof token);
-    if (token) {
-      console.log(token);
-      if (jwt.verify(token, jsonSecretKey)) {
-        req.decode = jwt.decode(token);
-        next();
-      } else {
-        res.status(403).json({ error: "Not Authorized." });
-      }
-    } else {
-      res.status(403).json({ error: "No token. Unauthorized." });
-    }
-  }
-});
-
-function getToken(req) {
-  return req.headers.authorization.split(" ")[1];
-}
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
@@ -57,7 +57,14 @@ app.post("/login", (req, res) => {
     .then((user) => {
       if (user && "" + user.get("password") === password) {
         res.json({
-          token: jwt.sign({ name: user.name }, jsonSecretKey),
+          token: jwt.sign(
+            {
+              name: user.get("name"),
+              id: user.get("id"),
+              username: user.get("username"),
+            },
+            jsonSecretKey
+          ),
           user: user,
         });
       } else {

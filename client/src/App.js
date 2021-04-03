@@ -6,6 +6,7 @@ import LoginRequired from "./pages/Login/LoginRequired";
 import HomePage from "./pages/HomePage/HomePage";
 import MainPage from "./components/MainPage/MainPage";
 import PostDetails from "./components/PostDetails/PostDetails";
+import AddPost from "./pages/AddPost/AddPost";
 import axios from "axios";
 import {
   BrowserRouter as Router,
@@ -29,12 +30,15 @@ class App extends Component {
     let one = axios.get(`http://localhost:8080/users`);
     let two = axios.get(`http://localhost:8080/posts`);
     axios
-      .all([one, two])
+      .all([
+        // one,
+        two,
+      ])
       .then(
         axios.spread((...responses) => {
           console.log(responses[1].data);
           this.setState({
-            users: responses[0].data,
+            // users: responses[0].data,
             posts: responses[1].data,
           });
         })
@@ -66,68 +70,64 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.posts !== null && this.state.users !== null) {
-      return (
-        <div className="App">
-          <BrowserRouter>
-            <Router className="App">
-              <Switch>
-                <MainPage
-                  path="/"
-                  exact
-                  render={() => (
-                    <LoginRequired>
-                      <MainPage />
-                    </LoginRequired>
-                  )}
-                />
-                <Route
-                  path="/signup"
-                  exact
-                  render={() => (
-                    <LoginRequired>
-                      <Signup />
-                    </LoginRequired>
-                  )}
-                />
-                <Route path="/login" exact render={() => <Login />} />
-                <Route path="/logout" exact render={() => <Logout />} />
-                {/* <Redirect from='/home' to='/'/> */}
-                <Route
-                  path="/posts"
-                  exact
-                  render={(props) => (
-                    <LoginRequired>
-                      <HomePage {...props} posts={this.state.posts} />
-                    </LoginRequired>
-                  )}
-                />
-                <Route
-                  path="/posts/:postsId"
-                  exact
-                  render={(props) => (
-                    <LoginRequired>
-                      <PostDetails
-                        {...props}
-                        posts={this.state.posts.find(
-                          (el) => el.id === props.match.params.postsId
-                        )}
-                      />
-                    </LoginRequired>
-                  )}
-                />
-              </Switch>
-            </Router>
-          </BrowserRouter>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <h1>LOADING</h1>
-        </div>
-      );
-    }
+    return (
+      <div className="App">
+        <BrowserRouter>
+          <Router className="App">
+            <Switch>
+              <MainPage
+                path="/"
+                exact
+                render={() => (
+                  <LoginRequired>
+                    <MainPage />
+                  </LoginRequired>
+                )}
+              />
+              <Route
+                path="/signup"
+                exact
+                render={() => (
+                  <LoginRequired>
+                    <Signup />
+                  </LoginRequired>
+                )}
+              />
+              <Route path="/login" exact render={() => <Login />} />
+              <Route path="/logout" exact render={() => <Logout />} />
+              {/* <Redirect from='/home' to='/'/> */}
+              <Route
+                path="/posts"
+                exact
+                render={(props) => (
+                  <LoginRequired>
+                    <HomePage {...props} posts={this.state.posts} />
+                  </LoginRequired>
+                )}
+              />
+              <Route
+                path="/posts/add"
+                exact
+                render={(props) => (
+                  <LoginRequired>
+                    <AddPost {...props} />
+                  </LoginRequired>
+                )}
+              />
+              <Route
+                path="/posts/:postsId"
+                exact
+                render={(props) => (
+                  <LoginRequired>
+                    <PostDetails {...props} />
+                  </LoginRequired>
+                )}
+              />
+            </Switch>
+          </Router>
+        </BrowserRouter>
+      </div>
+    );
   }
 }
 export default App;
