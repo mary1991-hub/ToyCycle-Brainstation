@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Profile from "../Profile/Profile";
 import { isAuthenticated } from "../../utils/auth";
 import { Redirect } from "react-router";
 import { login } from "../../utils/auth";
@@ -8,7 +7,6 @@ import { TextInputField, Button, Pane, Heading } from "evergreen-ui";
 const baseUrl = "http://localhost:8080";
 const loginUrl = `${baseUrl}/login`;
 const signupUrl = `${baseUrl}/signup`;
-const profilerUrl = `${baseUrl}/profile`;
 
 class Login extends Component {
   state = {

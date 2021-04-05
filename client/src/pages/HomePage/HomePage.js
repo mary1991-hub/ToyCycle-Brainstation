@@ -1,15 +1,14 @@
 import SinglePost from "../../components/SinglePost/SinglePost";
-import { useAuthUser } from "../../utils/auth";
-import "./HomePage.css";
-import { Button, Pane, Heading, SearchInput } from "evergreen-ui";
+import "./HomePage.scss";
+import { getUser, useAuthUser } from "../../utils/auth";
+import { Pane } from "evergreen-ui";
 
 const HomePage = (props) => {
   return (
     <Pane>
-      <Pane className="posts-container">
-        <Heading size={900}>Posts</Heading>
+      {/* <Pane className="posts-container">
         <SearchInput type="text" placeholder="Search..." />
-      </Pane>
+      </Pane> */}
 
       <div className="posts-cards">
         {props.posts &&

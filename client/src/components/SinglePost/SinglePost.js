@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./SinglePost.scss";
-import { TextInputField, Button, Pane, Heading, Card } from "evergreen-ui";
+import { Pane, Card } from "evergreen-ui";
 
 class SinglePost extends Component {
   render() {
@@ -12,6 +12,7 @@ class SinglePost extends Component {
             <img
               width={300}
               src={`http://localhost:8080/images/${this.props.posts.images}`}
+              alt=""
             />
           </Link>
         </Pane>

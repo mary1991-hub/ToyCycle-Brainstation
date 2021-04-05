@@ -1,16 +1,15 @@
 import React from "react";
 import axios from "axios";
-import backArrow from "../../assets/Icons/arrow_back-24px.svg";
 import OfferModule from "../OfferModule/OfferModule";
-import { Link } from "react-router-dom";
+import "./PostDetail.scss";
 import {
-  TextInputField,
   Button,
   Pane,
-  Heading,
   Paragraph,
   Strong,
-  Text,
+  Card,
+  UnorderedList,
+  majorScale,
 } from "evergreen-ui";
 
 class PostDetails extends React.Component {
@@ -56,74 +55,63 @@ class PostDetails extends React.Component {
       console.log(singlePost);
       return (
         <Pane className="details">
-          <div className="details__namearrow">
-            <Link className="details__link" to={"/posts"}>
-              <div className="details__box">
-                <img
-                  className="details__arrow"
-                  alt="back arrow"
-                  src={backArrow}
-                />
-              </div>
-            </Link>
-            <div className="details__box">
-              <Paragraph className="details__name">
-                {singlePost.data.name}
-              </Paragraph>
-            </div>
-            <div className="details__box">
-              <img
-                width={500}
-                src={`http://localhost:8080/images/${singlePost.data.images}`}
-              />
-            </div>
-            <div className="details__box">
-              <Paragraph
-                size={500}
-                marginTop="default"
-                className="details__name"
-              >
-                <Strong>Details:</Strong> {singlePost.data.description}
-              </Paragraph>
-            </div>
-            <div className="details__box">
-              <Paragraph
-                size={500}
-                marginTop="default"
-                className="details__name"
-              >
-                <Strong>Condition:</Strong> {singlePost.data.tradeCondition}
-              </Paragraph>
-            </div>
-            <div className="details__box">
-              <Paragraph
-                size={500}
-                marginTop="default"
-                className="details__name"
-              >
-                <Strong>Posted By:</Strong> {singlePost.data.users.name}
-              </Paragraph>
-              <img
-                width={100}
-                src={`http://localhost:8080/images/${singlePost.data.users.images}`}
-              />
-            </div>
-            <div className="details__box">
-              <Paragraph
-                size={500}
-                marginTop="default"
-                className="details__name"
-              >
-                ❤️ {singlePost.data.likes}
-              </Paragraph>
-            </div>
-            <div className="details__box">
-              <Paragraph className="details__name">
-                <Strong>Value:</Strong> {singlePost.data.value}
-              </Paragraph>
-            </div>
-            <Button appearance="primary" onClick={this.renderOfferModule}>
-              Trade
+          <Pane>
+            <img
+              className="details__image"
+              width={500}
+              src={`http://localhost:8080/images/${singlePost.data.images}`}
+              alt=""
+            />
+          </Pane>
+          <Pane className="details__card">
+            <Card
+              background="tint2"
+              marginBottom={majorScale(2)}
+              padding={majorScale(1)}
+            >
+              <UnorderedList>
+                <Paragraph size={500} marginTop="default" className="">
+                  <Strong>NAME:</Strong> {singlePost.data.name}
+                </Paragraph>
+                <Paragraph size={500} marginTop="default" className="">
+                  <Strong>DETAILS:</Strong> {singlePost.data.description}
+                </Paragraph>
+                <Paragraph
+                  size={500}
+                  marginTop="default"
+                  className="details__trade"
+                >
+                  <Strong>TRADE CONDITION:</Strong>{" "}
+                  {singlePost.data.tradeCondition}
+                </Paragraph>
+                <Paragraph className="">
+                  <Strong>VALUE:</Strong> {singlePost.data.value}
+                </Paragraph>
+                <Paragraph
+                  className="details__owner"
+                  size={500}
+                  marginTop="default"
+                >
+                  <Strong>
+                    <img
+                      className="details__avatar"
+                      width={30}
+                      src={`http://localhost:8080/images/${singlePost.data.users.images}`}
+                    />
+                  </Strong>{" "}
+                  {singlePost.data.users.name}
+                </Paragraph>
+                {/* <Paragraph size={500} marginTop="default" className="">
+                  ❤️ {singlePost.data.likes}
+                </Paragraph> */}
+              </UnorderedList>
+            </Card>
+            <Button
+              className="details__btn"
+              appearance="primary"
+              onClick={this.renderOfferModule}
+            >
+              OFFER
             </Button>
             {this.state.display && (
               <OfferModule
@@ -132,7 +120,7 @@ class PostDetails extends React.Component {
                 cancelOfferModule={this.cancelOfferModule}
               />
             )}
-          </div>
+          </Pane>
         </Pane>
       );
     } else {

@@ -11,8 +11,18 @@ const postsRouter = require("./routes/posts");
 const signupRouter = require("./routes/signup");
 const offersRouter = require("./routes/offers");
 const Users = require("./models/users");
-
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(fileUpload());
+
+app.use("/posts", postsRouter);
+app.use("/signup", signupRouter);
+app.use("/users", usersRouter);
+app.use("/offers", offersRouter);
+// app.use('/profile/:id',signupRouter.profile);
 
 const jsonSecretKey = "secret";
 function getToken(req) {
@@ -37,18 +47,6 @@ app.use((req, res, next) => {
     next();
   }
 });
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
-app.use(fileUpload());
-
-app.use("/posts", postsRouter);
-app.use("/signup", signupRouter);
-app.use("/users", usersRouter);
-app.use("/offers", offersRouter);
-// app.use('/profile/:id',signupRouter.profile);
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;

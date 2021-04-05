@@ -10,7 +10,6 @@ router.post("/", (req, res) => {
       const uploadPath =
         process.cwd() + "/public/images/upload_images/" + filePath;
 
-      // Use the mv() method to place the file somewhere on your server
       req.files.images.mv(uploadPath, function (err) {
         if (err) reject(err);
 
@@ -40,15 +39,3 @@ router.post("/", (req, res) => {
 });
 
 module.exports = router;
-
-// exports.profile = function(req, res){
-// 	let message = '';
-// 	let id = req.params.id;
-//     let sql="SELECT * FROM `users` WHERE `id`='"+id+"'";
-//     lequery(sql, function(err, result){
-// 	  if(result.length <= 0)
-// 	  message = "Profile not found!";
-
-//       res.render('/profile',{data:result, message: message});
-//    });
-// };

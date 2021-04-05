@@ -4,10 +4,10 @@ import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 import LoginRequired from "./pages/Login/LoginRequired";
 import HomePage from "./pages/HomePage/HomePage";
-import MainPage from "./components/MainPage/MainPage";
 import PostDetails from "./components/PostDetails/PostDetails";
 import AddPost from "./pages/AddPost/AddPost";
 import axios from "axios";
+import Header from "./components/Header/Header";
 import {
   BrowserRouter as Router,
   Switch,
@@ -30,15 +30,12 @@ class App extends Component {
     let one = axios.get(`http://localhost:8080/users`);
     let two = axios.get(`http://localhost:8080/posts`);
     axios
-      .all([
-        // one,
-        two,
-      ])
+      .all([one, two])
       .then(
         axios.spread((...responses) => {
           console.log(responses[1].data);
           this.setState({
-            // users: responses[0].data,
+            users: responses[0].data,
             posts: responses[1].data,
           });
         })
@@ -74,16 +71,9 @@ class App extends Component {
       <div className="App">
         <BrowserRouter>
           <Router className="App">
+            <Header />
             <Switch>
-              <MainPage
-                path="/"
-                exact
-                render={() => (
-                  <LoginRequired>
-                    <MainPage />
-                  </LoginRequired>
-                )}
-              />
+              <Signup path="/" exact render={() => <Signup />} />
               <Route
                 path="/signup"
                 exact
@@ -95,7 +85,6 @@ class App extends Component {
               />
               <Route path="/login" exact render={() => <Login />} />
               <Route path="/logout" exact render={() => <Logout />} />
-              {/* <Redirect from='/home' to='/'/> */}
               <Route
                 path="/posts"
                 exact

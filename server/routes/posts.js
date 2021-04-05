@@ -44,7 +44,6 @@ router.post("/", requireAuth, (req, res) => {
       const uploadPath =
         process.cwd() + "/public/images/upload_images/" + filePath;
 
-      // Use the mv() method to place the file somewhere on your server
       req.files.images.mv(uploadPath, function (err) {
         if (err) reject(err);
 
@@ -92,7 +91,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", (_req, res) => {
   res.status(200).json({ status: "OK" });
 });
 

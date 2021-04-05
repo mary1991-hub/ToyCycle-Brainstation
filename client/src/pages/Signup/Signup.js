@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Profile from "../Profile/Profile";
 import { Redirect } from "react-router";
-import { TextInputField, Button, Pane, Heading } from "evergreen-ui";
-import { Formik } from "formik";
+import "./Signup.scss";
+import {
+  TextInputField,
+  Button,
+  Pane,
+  Heading,
+  FilePicker,
+} from "evergreen-ui";
 
 const baseUrl = "http://localhost:8080";
-const loginUrl = `${baseUrl}/login`;
 const signupUrl = `${baseUrl}/signup`;
-const profilerUrl = `${baseUrl}/profile`;
 
 class Signup extends Component {
   state = {
@@ -60,9 +63,20 @@ class Signup extends Component {
 
   renderSignUp() {
     return (
-      <Pane display="flex" alignItems="center" justifyContent="center">
-        <Pane border="default" width={300} padding={20}>
-          <Heading size={700}>SignUp</Heading>
+      <Pane
+        className="signup"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Pane className="signup__image">
+          <img
+            src=" https://images.unsplash.com/photo-1531512721928-a2c9d1a3fb9f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MTN8NDQ1MzQ4NHx8ZW58MHx8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
+            alt=""
+          />
+        </Pane>
+        <Pane className="signup__form" border="default" padding={20}>
+          <Heading size={700}>Wellcome to ToyCycle</Heading>
           <form ref={(form) => (this.signUpForm = form)}>
             <TextInputField label="Username:" type="text" name="username" />
             <TextInputField label="Name:" type="text" name="name" />
@@ -70,17 +84,22 @@ class Signup extends Component {
             <TextInputField label="City:" type="text" name="city" />
             <TextInputField label="Email:" type="text" name="email" />
             <TextInputField label="Phone:" type="text" name="phone" />
-            <TextInputField
+            <FilePicker
+              multiple
+              width={460}
+              marginBottom={32}
+              onChange={(files) => console.log(files)}
+              placeholder="Select an image to upload..."
               label="Profile Image:"
               class="form-control"
-              type="file"
+              type="File"
               name="uploaded_image"
               accept=""
             />
             <TextInputField label="Password:" type="password" name="password" />
-            <button className="button-primary" onClick={this.signup}>
-              Signup
-            </button>
+            <Button appearance="primary" onClick={this.signup}>
+              Sign In
+            </Button>
           </form>
         </Pane>
       </Pane>
@@ -92,7 +111,8 @@ class Signup extends Component {
 
     if (!isSignedUp) return this.renderSignUp();
 
-    return <Redirect to="/login" />;
+    return;
+    <Redirect to="/posts" />;
   }
 }
 export default Signup;
