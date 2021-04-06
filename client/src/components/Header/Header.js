@@ -5,7 +5,13 @@ import "./Header.scss";
 export default function App(props) {
   return (
     <Pane>
-      <Pane is="header" elevation={2} height={72} display="flex">
+      <Pane
+        is="header"
+        elevation={2}
+        height={72}
+        display="flex"
+        justifyContent="space-between"
+      >
         <Pane
           width={960}
           display="flex"
@@ -13,23 +19,48 @@ export default function App(props) {
           marginLeft={85}
           marginRight="auto"
         >
-          <Link className="header__logo" to={"/posts"}>
-            <Heading
-              className="header__heading"
-              size={600}
-              letterSpacing="2px"
-              fontWeight={700}
-            >
-              ToyCycle
-            </Heading>
-          </Link>
-          <TabNavigation className="header__tab">
-            {["Upload Post", "Profile", "Logout"].map((tab, index) => (
-              <Tab key={tab} is="a" href="#" id={tab} isSelected={index === 0}>
-                {tab}
-              </Tab>
-            ))}
-          </TabNavigation>
+          <Pane>
+            <Link className="header__logo" to={"/posts"}>
+              <Heading
+                className="header__heading"
+                size={600}
+                letterSpacing="2px"
+                fontWeight={700}
+              >
+                ToyCycle
+                {/* <img src="../../assets/Logo/Free_Sample_By_Wix(1).jpeg" /> */}
+              </Heading>
+            </Link>
+          </Pane>
+          <Pane>
+            <TabNavigation className="header__tab">
+              <Link className="header__logo" to={"/posts/add"}>
+                <Tab
+                  key={"Upload Post"}
+                  is="a"
+                  href="http://localhost:8080/posts/add"
+                  id={"Upload Post"}
+                >
+                  {"Upload Post"}
+                </Tab>
+              </Link>
+              <Link className="header__logo" to={"/profile"}>
+                <Tab
+                  key={"Profile"}
+                  is="a"
+                  href="http://localhost:8080/profile"
+                  id={"Profile"}
+                >
+                  {"Profile"}
+                </Tab>
+              </Link>
+              <Link className="header__logo" to={"/logout"}>
+                <Tab key={"Logout"} is="a" href="http://localhost:8080/logout">
+                  {"Logout"}
+                </Tab>
+              </Link>
+            </TabNavigation>
+          </Pane>
         </Pane>
       </Pane>
     </Pane>

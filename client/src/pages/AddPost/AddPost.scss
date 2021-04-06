@@ -1,0 +1,21 @@
+.upload {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+
+  &__image {
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh;
+  }
+  &__form {
+    width: 100%;
+    height: 100vh;
+    padding: 3rem;
+  }
+  &__name {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+}

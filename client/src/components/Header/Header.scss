@@ -1,4 +1,6 @@
 .header {
+  display: flex;
+  justify-content: space-between;
   &__logo {
     text-decoration: none;
   }

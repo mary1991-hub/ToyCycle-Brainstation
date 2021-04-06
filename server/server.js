@@ -18,12 +18,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
 
-app.use("/posts", postsRouter);
-app.use("/signup", signupRouter);
-app.use("/users", usersRouter);
-app.use("/offers", offersRouter);
-// app.use('/profile/:id',signupRouter.profile);
-
 const jsonSecretKey = "secret";
 function getToken(req) {
   console.log(req.headers.authorization);
@@ -47,6 +41,11 @@ app.use((req, res, next) => {
     next();
   }
 });
+
+app.use("/posts", postsRouter);
+app.use("/signup", signupRouter);
+app.use("/users", usersRouter);
+app.use("/offers", offersRouter);
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
@@ -85,8 +84,15 @@ app.post("/login", (req, res) => {
       });
     });
 });
-app.get("/profile", (req, res) => {
-  res.json(req.decode);
+app.get("/profile/:id", (req, res) => {
+  Users.where({ id: req.params.id })
+    .fetch({ withRelated: ["posts"] })
+    .then((users) => {
+      res.status(200).json(users);
+    })
+    .catch(() => {
+      res.status(400).json({ error: "No users with this ID" });
+    });
 });
 
 app.listen(PORT, () => {

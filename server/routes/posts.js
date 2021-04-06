@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Posts = require("../models/posts");
-const Users = require("../models/users");
+// const Users = require("../models/users");
 
 router.get("/", (_req, res) => {
   Posts.fetchAll().then((posts) => {
@@ -22,6 +22,7 @@ const age_categories = {
 };
 
 const requireAuth = (req, res, next) => {
+  console.log(req.authUser);
   if (req.authUser) {
     next();
   } else {
@@ -29,7 +30,7 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-router.get("/my/", requireAuth, (req, res) => {
+router.get("/my", requireAuth, (req, res) => {
   Posts.where({ user_id: req.authUser.id })
     .fetchAll()
     .then((posts) => {
@@ -41,8 +42,7 @@ router.post("/", requireAuth, (req, res) => {
   let filePromise = new Promise((resolve, reject) => {
     if (req.files && req.files.images) {
       const filePath = req.files.images.name.replace(/\ /gi, "_");
-      const uploadPath =
-        process.cwd() + "/public/images/upload_images/" + filePath;
+      const uploadPath = process.cwd() + "/public/images/" + filePath;
 
       req.files.images.mv(uploadPath, function (err) {
         if (err) reject(err);

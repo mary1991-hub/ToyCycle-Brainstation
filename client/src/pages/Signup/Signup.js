@@ -76,7 +76,9 @@ class Signup extends Component {
           />
         </Pane>
         <Pane className="signup__form" border="default" padding={20}>
-          <Heading size={700}>Wellcome to ToyCycle</Heading>
+          <Heading size={700} marginBottom={24} marginTop={16}>
+            Wellcome to ToyCycle
+          </Heading>
           <form ref={(form) => (this.signUpForm = form)}>
             <TextInputField label="Username:" type="text" name="username" />
             <TextInputField label="Name:" type="text" name="name" />
@@ -110,9 +112,7 @@ class Signup extends Component {
     const { isSignedUp } = this.state;
 
     if (!isSignedUp) return this.renderSignUp();
-
-    return;
-    <Redirect to="/posts" />;
+    return <Redirect to="/posts" />;
   }
 }
 export default Signup;

@@ -6,10 +6,6 @@ import { Pane } from "evergreen-ui";
 const HomePage = (props) => {
   return (
     <Pane>
-      {/* <Pane className="posts-container">
-        <SearchInput type="text" placeholder="Search..." />
-      </Pane> */}
-
       <div className="posts-cards">
         {props.posts &&
           props.posts.map((post) => {

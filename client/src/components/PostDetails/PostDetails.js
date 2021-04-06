@@ -101,9 +101,6 @@ class PostDetails extends React.Component {
                   </Strong>{" "}
                   {singlePost.data.users.name}
                 </Paragraph>
-                {/* <Paragraph size={500} marginTop="default" className="">
-                  ❤️ {singlePost.data.likes}
-                </Paragraph> */}
               </UnorderedList>
             </Card>
             <Button

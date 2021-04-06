@@ -4,6 +4,7 @@ import { isAuthenticated } from "../../utils/auth";
 import { Redirect } from "react-router";
 import { login } from "../../utils/auth";
 import { TextInputField, Button, Pane, Heading } from "evergreen-ui";
+import "./Login.scss";
 const baseUrl = "http://localhost:8080";
 const loginUrl = `${baseUrl}/login`;
 const signupUrl = `${baseUrl}/signup`;
@@ -98,22 +99,41 @@ class Login extends Component {
   renderLogin() {
     const { isLoginError, errorMessage } = this.state;
     return (
-      <Pane display="flex" alignItems="center" justifyContent="center">
-        <Pane border="default" width={300} padding={20}>
-          <Heading size={700}>Login</Heading>
-          {isLoginError && (
-            <label style={{ color: "red" }}>{errorMessage}</label>
-          )}
-          <form
-            ref={(form) => (this.loginForm = form)}
-            style={{ marginTop: 10 }}
+      <Pane className="login">
+        <Pane display="flex" alignItems="center" justifyContent="center">
+          <Pane
+            border="default"
+            backgroundColor="white"
+            borderRadius={16}
+            marginTop={64}
+            width={300}
+            padding={20}
           >
-            <TextInputField label="Username:" type="text" name="username" />
-            <TextInputField label="Password:" type="password" name="password" />
-            <Button appearance="primary" onClick={this.login}>
-              Login
-            </Button>
-          </form>
+            <Heading size={700}>Login</Heading>
+            {isLoginError && (
+              <label style={{ color: "red" }}>{errorMessage}</label>
+            )}
+            <form
+              ref={(form) => (this.loginForm = form)}
+              style={{ marginTop: 10 }}
+            >
+              <TextInputField
+                color="white"
+                label="Username:"
+                type="text"
+                name="username"
+              />
+              <TextInputField
+                color="white"
+                label="Password:"
+                type="password"
+                name="password"
+              />
+              <Button appearance="primary" onClick={this.login}>
+                Login
+              </Button>
+            </form>
+          </Pane>
         </Pane>
       </Pane>
     );
