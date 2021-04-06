@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import Profile from './pages/Profile/Profile';
+import Profile from "./pages/Profile/Profile";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 import LoginRequired from "./pages/Login/LoginRequired";
@@ -8,6 +8,8 @@ import PostDetails from "./components/PostDetails/PostDetails";
 import AddPost from "./pages/AddPost/AddPost";
 import axios from "axios";
 import Header from "./components/Header/Header";
+import MyTrades from "./components/MyTrades/MyTrades";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -100,6 +102,24 @@ class App extends Component {
                 render={(props) => (
                   <LoginRequired>
                     <AddPost {...props} />
+                  </LoginRequired>
+                )}
+              />
+              <Route
+                path="/profile"
+                exact
+                render={() => (
+                  <LoginRequired>
+                    <Profile />
+                  </LoginRequired>
+                )}
+              />
+              <Route
+                path="/offers"
+                exact
+                render={() => (
+                  <LoginRequired>
+                    <MyTrades />
                   </LoginRequired>
                 )}
               />

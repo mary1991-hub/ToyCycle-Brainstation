@@ -54,6 +54,16 @@ export default function App(props) {
                   {"Profile"}
                 </Tab>
               </Link>
+              <Link className="header__logo" to={"/offers"}>
+                <Tab
+                  key={"My Trades"}
+                  is="a"
+                  href="http://localhost:8080/offers"
+                  id={"My Trades"}
+                >
+                  {"My Trades"}
+                </Tab>
+              </Link>
               <Link className="header__logo" to={"/logout"}>
                 <Tab key={"Logout"} is="a" href="http://localhost:8080/logout">
                   {"Logout"}

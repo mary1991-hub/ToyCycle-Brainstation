@@ -14,7 +14,9 @@ router.get("/", (_req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-  Offers.where({ id: req.params.id })
+  const token = req.headers.authorization.split(" ")[1];
+  var decoded = jwt.decode(token, { complete: true });
+  Offers.where({ id: decoded.payload.id })
     .fetch({
       withRelated: ["seller", "buyer", "sellerPost", "buyerPost"],
     })

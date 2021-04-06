@@ -84,8 +84,12 @@ app.post("/login", (req, res) => {
       });
     });
 });
-app.get("/profile/:id", (req, res) => {
-  Users.where({ id: req.params.id })
+app.get("/profile", (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  // console.log(token);
+  var decoded = jwt.decode(token, { complete: true });
+  // console.log(decoded.payload.id);
+  Users.where({ id: decoded.payload.id })
     .fetch({ withRelated: ["posts"] })
     .then((users) => {
       res.status(200).json(users);
