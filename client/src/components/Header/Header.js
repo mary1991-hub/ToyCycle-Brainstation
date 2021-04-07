@@ -46,7 +46,7 @@ export default function App(props) {
                   {"Upload Post"}
                 </Tab>
               </Link>
-              {/* <Link className="header__logo" to={"/posts"}>
+              <Link className="header__logo" to={"/posts"}>
                 <Tab
                   key={"Posts"}
                   is="a"
@@ -55,7 +55,7 @@ export default function App(props) {
                 >
                   {"Posts"}
                 </Tab>
-              </Link> */}
+              </Link>
               <Link className="header__logo" to={"/posts/my"}>
                 <Tab
                   key={"My Posts"}

@@ -52,6 +52,7 @@ export const Offer = ({ offer }) => {
           <div>
             <img
               width={150}
+              height={150}
               src={`${IMAGE_BASE_URL}${offer.buyerPost.images}`}
             />
           </div>
@@ -72,6 +73,7 @@ export const Offer = ({ offer }) => {
           <div>
             <img
               width={150}
+              height={150}
               src={`${IMAGE_BASE_URL}${offer.sellerPost.images}`}
             />
           </div>

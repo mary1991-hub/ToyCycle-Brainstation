@@ -1,6 +1,6 @@
 import SinglePost from "../../components/SinglePost/SinglePost";
 import "./HomePage.scss";
-import { getUser, getToken, useAuthUser } from "../../utils/auth";
+import { getToken } from "../../utils/auth";
 import { Pane } from "evergreen-ui";
 import React from "react";
 import axios from "axios";
