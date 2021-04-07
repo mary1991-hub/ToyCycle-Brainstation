@@ -9,13 +9,8 @@ import AddPost from "./pages/AddPost/AddPost";
 import axios from "axios";
 import Header from "./components/Header/Header";
 import MyTrades from "./components/MyTrades/MyTrades";
-
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  BrowserRouter,
-} from "react-router-dom";
+import history from "./utils/history";
+import { Router, Switch, Route } from "react-router-dom";
 import Logout from "./pages/Login/Logout";
 
 class App extends Component {
@@ -71,70 +66,87 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <BrowserRouter>
-          <Router className="App">
-            <Header />
-            <Switch>
-              <Signup path="/" exact render={() => <Signup />} />
-              <Route
-                path="/signup"
-                exact
-                render={() => (
-                  <LoginRequired>
-                    <Signup />
-                  </LoginRequired>
-                )}
-              />
-              <Route path="/login" exact render={() => <Login />} />
-              <Route path="/logout" exact render={() => <Logout />} />
-              <Route
-                path="/posts"
-                exact
-                render={(props) => (
-                  <LoginRequired>
-                    <HomePage {...props} posts={this.state.posts} />
-                  </LoginRequired>
-                )}
-              />
-              <Route
-                path="/posts/add"
-                exact
-                render={(props) => (
-                  <LoginRequired>
-                    <AddPost {...props} />
-                  </LoginRequired>
-                )}
-              />
-              <Route
-                path="/profile"
-                exact
-                render={() => (
-                  <LoginRequired>
-                    <Profile />
-                  </LoginRequired>
-                )}
-              />
-              <Route
-                path="/offers"
-                exact
-                render={() => (
-                  <LoginRequired>
-                    <MyTrades />
-                  </LoginRequired>
-                )}
-              />
-              <Route
-                path="/posts/:postsId"
-                exact
-                render={(props) => (
-                  <LoginRequired>
-                    <PostDetails {...props} />
-                  </LoginRequired>
-                )}
-              />
-            </Switch>
-          </Router>
-        </BrowserRouter>
+        <Router history={history}>
+          <Header />
+          <Switch>
+            <Signup path="/" exact render={() => <Signup />} />
+            <Route path="/signup" exact render={() => <Signup />} />
+            <Route path="/login" exact render={() => <Login />} />
+            <Route path="/logout" exact render={() => <Logout />} />
+            <Route
+              path="/posts"
+              exact
+              render={(props) => (
+                <LoginRequired>
+                  <HomePage {...props} uri={"/posts"} />
+                </LoginRequired>
+              )}
+            />
+            <Route
+              path="/posts/my"
+              exact
+              render={(props) => (
+                <LoginRequired>
+                  <HomePage {...props} uri={"/posts/my"} />
+                </LoginRequired>
+              )}
+            />
+            <Route
+              path="/posts/add"
+              exact
+              render={(props) => (
+                <LoginRequired>
+                  <AddPost {...props} />
+                </LoginRequired>
+              )}
+            />
+            <Route
+              path="/profile"
+              exact
+              render={() => (
+                <LoginRequired>
+                  <Profile />
+                </LoginRequired>
+              )}
+            />
+            <Route
+              path="/offers/my"
+              exact
+              render={() => (
+                <LoginRequired>
+                  <MyTrades to={"my"} />
+                </LoginRequired>
+              )}
+            />
+            <Route
+              path="/offers/me"
+              exact
+              render={() => (
+                <LoginRequired>
+                  <MyTrades to={"me"} />
+                </LoginRequired>
+              )}
+            />
+            <Route
+              path="/offers/:offerId"
+              exact
+              render={(props) => (
+                <LoginRequired>
+                  <MyTrades to={props.match.params.offerId} />
+                </LoginRequired>
+              )}
+            />
+            <Route
+              path="/posts/:postsId"
+              exact
+              render={(props) => (
+                <LoginRequired>
+                  <PostDetails {...props} />
+                </LoginRequired>
+              )}
+            />
+          </Switch>
+        </Router>
       </div>
     );
   }

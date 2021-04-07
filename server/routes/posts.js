@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Posts = require("../models/posts");
 // const Users = require("../models/users");
+const requireAuth = require("./requireAuth");
 
 router.get("/", (_req, res) => {
   Posts.fetchAll().then((posts) => {
@@ -19,15 +20,6 @@ const age_categories = {
   1: "asdasds",
   2: "asdasds",
   3: "asdasds",
-};
-
-const requireAuth = (req, res, next) => {
-  console.log(req.authUser);
-  if (req.authUser) {
-    next();
-  } else {
-    res.status(403).json({ error: "Unauthorized" });
-  }
 };
 
 router.get("/my", requireAuth, (req, res) => {

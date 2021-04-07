@@ -1,19 +1,11 @@
-import { Form, Formik, useFormikContext, useField } from "formik";
-import {
-  Pane,
-  Button,
-  Heading,
-  Textarea,
-  FilePicker,
-  FormField,
-  TextInput,
-  Alert,
-} from "evergreen-ui";
+import { Form, Formik, useFormikContext } from "formik";
+import { Pane, Button, Heading } from "evergreen-ui";
 import axios from "axios";
 import { getToken } from "../../utils/auth";
 import React from "react";
-import { Redirect } from "react-router";
+import FormikFormField from "../../components/FormikFormField/FormikFormField";
 import "./AddPost.scss";
+import { redirect } from "../../utils/history";
 
 const createPost = (values) => {
   console.log(values);
@@ -49,39 +41,6 @@ const validate = (values) => {
   } else {
     return null;
   }
-};
-
-const FormikFormField = ({ name, type, label }) => {
-  const [field, meta, helpers] = useField(name);
-
-  return (
-    <FormField label={label}>
-      {type === "textarea" ? (
-        <Textarea
-          name={name}
-          onChange={field.onChange}
-          value={field.value}
-          type={type}
-        />
-      ) : type === "image" ? (
-        <FilePicker
-          name={name}
-          onChange={(file) => {
-            helpers.setValue(file[0]);
-          }}
-          value={field.value}
-        />
-      ) : (
-        <TextInput
-          name={name}
-          onChange={field.onChange}
-          value={field.value}
-          type={type}
-        />
-      )}
-      {meta.error ? <Alert intent="danger" title={meta.error} /> : null}
-    </FormField>
-  );
 };
 
 const PostForm = () => {
@@ -124,10 +83,7 @@ const PostForm = () => {
 };
 
 const AddPost = () => {
-  const [created, setCreated] = React.useState(null);
-  return created ? (
-    <Redirect to={`/posts/${created.id}`} />
-  ) : (
+  return (
     <Formik
       initialValues={{}}
       validate={validate}
@@ -135,7 +91,7 @@ const AddPost = () => {
         createPost(values)
           .then((result) => {
             actions.setStatus(null);
-            setCreated(result.data);
+            redirect(`/posts/${result.data.id}`);
           })
           .catch((error) => {
             actions.setStatus({ error });

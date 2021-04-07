@@ -1,8 +1,10 @@
 import { Heading, Pane, TabNavigation, Tab } from "evergreen-ui";
 import { Link } from "react-router-dom";
+import { getUser } from "../../utils/auth";
 import "./Header.scss";
 
 export default function App(props) {
+  const user = getUser();
   return (
     <Pane>
       <Pane
@@ -44,6 +46,46 @@ export default function App(props) {
                   {"Upload Post"}
                 </Tab>
               </Link>
+              {/* <Link className="header__logo" to={"/posts"}>
+                <Tab
+                  key={"Posts"}
+                  is="a"
+                  href="http://localhost:8080/posts"
+                  id={"Posts"}
+                >
+                  {"Posts"}
+                </Tab>
+              </Link> */}
+              <Link className="header__logo" to={"/posts/my"}>
+                <Tab
+                  key={"My Posts"}
+                  is="a"
+                  href="http://localhost:8080/posts/my"
+                  id={"My Posts"}
+                >
+                  {"My Posts"}
+                </Tab>
+              </Link>
+              <Link className="header__logo" to={"/offers/my"}>
+                <Tab
+                  key={"My Offers"}
+                  is="a"
+                  href="http://localhost:8080/offers/my"
+                  id={"My Offers"}
+                >
+                  {"My Offers"}
+                </Tab>
+              </Link>
+              <Link className="header__logo" to={"/offers/me"}>
+                <Tab
+                  key={"Offers to me"}
+                  is="a"
+                  href="http://localhost:8080/offers/me"
+                  id={"Offers to me"}
+                >
+                  {"Offers to me"}
+                </Tab>
+              </Link>
               <Link className="header__logo" to={"/profile"}>
                 <Tab
                   key={"Profile"}
@@ -54,21 +96,38 @@ export default function App(props) {
                   {"Profile"}
                 </Tab>
               </Link>
-              <Link className="header__logo" to={"/offers"}>
-                <Tab
-                  key={"My Trades"}
-                  is="a"
-                  href="http://localhost:8080/offers"
-                  id={"My Trades"}
-                >
-                  {"My Trades"}
-                </Tab>
-              </Link>
-              <Link className="header__logo" to={"/logout"}>
-                <Tab key={"Logout"} is="a" href="http://localhost:8080/logout">
-                  {"Logout"}
-                </Tab>
-              </Link>
+              {user ? (
+                <Link className="header__logo" to={"/logout"}>
+                  <Tab
+                    key={"Logout"}
+                    is="a"
+                    href="http://localhost:8080/logout"
+                  >
+                    {"Logout"}
+                  </Tab>
+                </Link>
+              ) : (
+                <>
+                  <Link className="header__logo" to={"/login"}>
+                    <Tab
+                      key={"login"}
+                      is="a"
+                      href="http://localhost:8080/login"
+                    >
+                      {"Login"}
+                    </Tab>
+                  </Link>
+                  <Link className="header__logo" to={"/signup"}>
+                    <Tab
+                      key={"signup"}
+                      is="a"
+                      href="http://localhost:8080/signup"
+                    >
+                      {"Sign up"}
+                    </Tab>
+                  </Link>
+                </>
+              )}
             </TabNavigation>
           </Pane>
         </Pane>

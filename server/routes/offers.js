@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Offers = require("../models/offers");
+const requireAuth = require("./requireAuth");
 
-router.get("/", (_req, res) => {
+router.get("/", requireAuth, (_req, res) => {
   Offers
     // .where("status", "<>", "Canceled")
     .fetchAll({
@@ -13,10 +14,51 @@ router.get("/", (_req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
-  const token = req.headers.authorization.split(" ")[1];
-  var decoded = jwt.decode(token, { complete: true });
-  Offers.where({ id: decoded.payload.id })
+router.get("/my", requireAuth, (_req, res) => {
+  Offers.where("status", "<>", "Canceled")
+    .where({ buyer_user_id: _req.authUser.id })
+    .fetchAll({
+      withRelated: ["seller", "buyer", "sellerPost", "buyerPost"],
+    })
+    .then((offers) => {
+      res.status(200).json(offers);
+    });
+});
+
+router.get("/me", requireAuth, (_req, res) => {
+  Offers.where("status", "<>", "Canceled")
+    .where({ seller_user_id: _req.authUser.id })
+    .fetchAll({
+      withRelated: ["seller", "buyer", "sellerPost", "buyerPost"],
+    })
+    .then((offers) => {
+      res.status(200).json(offers);
+    });
+});
+
+router.post("/", requireAuth, (req, res) => {
+  new Offers({
+    buyer_user_id: req.body.buyer_user_id,
+    seller_user_id: req.body.seller_user_id,
+    buyer_post_id: req.body.buyer_post_id,
+    seller_post_id: req.body.seller_post_id,
+    buyer_message: req.body.buyer_message,
+    seller_message: "",
+    status: "Pending",
+  })
+    .save()
+    .then((newOffer) => {
+      return Offers.where({ id: newOffer.get("id") }).fetch({
+        withRelated: ["seller", "buyer", "sellerPost", "buyerPost"],
+      });
+    })
+    .then((newOffer) => {
+      res.status(200).json(newOffer);
+    });
+});
+
+router.get("/:id", requireAuth, (req, res) => {
+  Offers.where({ id: req.params.id })
     .fetch({
       withRelated: ["seller", "buyer", "sellerPost", "buyerPost"],
     })

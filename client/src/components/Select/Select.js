@@ -2,13 +2,15 @@ import React from "react";
 import axios from "axios";
 import "./Select.scss";
 import { getToken } from "../../utils/auth";
-import { Li, Ul } from "evergreen-ui";
+import { SelectMenu, Button } from "evergreen-ui";
 
 class ControlledOpenSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       myPosts: null,
+      loading: true,
+      selected: null,
       image: null,
     };
   }
@@ -25,26 +27,50 @@ class ControlledOpenSelect extends React.Component {
         this.setState({
           myPosts: response.data,
         });
+      })
+      .finally(() => {
+        this.setState({ loading: false });
       });
   }
-  // handleSelect = () => {
-  //   this.setState({
-  //     image: this.state.myPosts.data.images,
-  //   });
-  // };
+
   render() {
-    const myData = this.state.myPosts;
-    if (!myData) {
+    const { myPosts, selected, loading } = this.state;
+    const { onChange } = this.props;
+    if (loading) {
       return <p>"Loading.."</p>;
     }
+    const options = myPosts.map((posting) => {
+      return {
+        label: posting?.name,
+        value: posting,
+        icon: `http://localhost:8080/images/${posting.images}`,
+      };
+    });
     return (
-      <Ul>
-        {myData.map((data) => (
-          <Li key={data.id} onClick>
-            {data.name}
-          </Li>
-        ))}
-      </Ul>
+      <SelectMenu
+        title="Select your positing to trade"
+        selected={selected}
+        options={options}
+        onSelect={(option) => {
+          this.setState({ selected: option.value });
+          if (onChange) {
+            onChange(option.value.id);
+          }
+        }}
+      >
+        <Button
+          iconBefore={
+            selected ? (
+              <img
+                width={24}
+                src={`http://localhost:8080/images/${selected.images}`}
+              />
+            ) : null
+          }
+        >
+          {selected ? selected.name : "Select your posting to trade..."}
+        </Button>
+      </SelectMenu>
     );
   }
 }

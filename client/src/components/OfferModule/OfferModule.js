@@ -1,21 +1,20 @@
 import React from "react";
 import axios from "axios";
 import "./OfferModule.scss";
-import backArrow from "../../assets/Icons/arrow_drop_down-24px.svg";
 import Select from "../Select/Select";
-import { Button, Pane, Heading, Textarea } from "evergreen-ui";
-
+import { Button, Pane, Heading } from "evergreen-ui";
+import { Form, withFormik } from "formik";
+import FormikFormField from "../FormikFormField/FormikFormField";
+import { getUser } from "../../utils/auth";
+import { IMAGE_BASE_URL } from "../../utils/constants";
+import { getToken } from "../../utils/auth";
+import { redirect } from "../../utils/history";
 class OfferModule extends React.Component {
   state = {
     offers: null,
     display: false,
   };
 
-  renderSelect = () => {
-    this.setState({
-      display: true,
-    });
-  };
   componentDidMount() {
     axios.get(`http://localhost:8080/offers`).then((response) => {
       console.log(response);
@@ -25,8 +24,9 @@ class OfferModule extends React.Component {
     });
   }
   render() {
+    console.log(this.props);
     return (
-      <>
+      <Form>
         <span className="offer-module--grey-background"></span>
         <Pane className="offer-module">
           <input
@@ -40,24 +40,28 @@ class OfferModule extends React.Component {
           <Pane className="offer-module__buy">
             <img
               className="offer-module__image"
-              src={`http://localhost:8080/images/${this.props.posts.images}`}
+              src={`${IMAGE_BASE_URL}${this.props.posts.images}`}
               alt=""
             />
-            <Textarea name="textarea-1" placeholder="Message placeholder..." />
+            <div>
+              <FormikFormField
+                label={"My Toys:"}
+                name={"buyer_post_id"}
+                component={Select}
+              />
+              <FormikFormField
+                label={"Message:"}
+                type="textarea"
+                name="buyer_message"
+                placeholder="Message placeholder..."
+              />
+            </div>
           </Pane>
-          <div className="details__box">
-            <img
-              onClick={this.renderSelect}
-              className="details__arrow"
-              alt="back arrow"
-              src={backArrow}
-            />
-            {this.state.display && <Select posts={this.props.posts} />}
-          </div>
           <Pane className="offer-module__btn">
             <Button
               className="offer-module__btn-offer"
               appearance="primary"
+              disabled={!this.props.isValid}
               onClick={this.proposeOfferModule}
             >
               Offer
@@ -71,9 +75,41 @@ class OfferModule extends React.Component {
             </Button>
           </Pane>
         </Pane>
-      </>
+      </Form>
     );
   }
 }
 
-export default OfferModule;
+export default withFormik({
+  mapPropsToValues: (props) => ({
+    seller_post_id: props.posts.id,
+    seller_user_id: props.posts.user_id,
+    buyer_user_id: getUser().id,
+  }),
+  validate: (values) => {
+    const errors = {};
+
+    if (!values.buyer_post_id) {
+      errors.buyer_post_id = "Required";
+    }
+
+    return errors;
+  },
+  handleSubmit: (values, { setSubmitting }) => {
+    setSubmitting(true);
+    axios
+      .post(`http://localhost:8080/offers`, values, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        redirect(`/offers/${response.data.id}`);
+      })
+      .finally(() => {
+        setSubmitting(false);
+      });
+  },
+  displayName: "OfferForm",
+})(OfferModule);

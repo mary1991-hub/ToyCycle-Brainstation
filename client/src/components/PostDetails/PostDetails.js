@@ -11,7 +11,22 @@ import {
   UnorderedList,
   majorScale,
 } from "evergreen-ui";
+import { getUser, getToken } from "../../utils/auth";
+import { API_BASE_URL } from "../../utils/constants";
+import { redirect } from "../../utils/history";
 
+const deletePost = (postId) => {
+  axios
+    .delete(`${API_BASE_URL}/posts/${postId}`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    })
+    .then(() => {
+      redirect("/posts/my");
+      window.location.reload();
+    });
+};
 class PostDetails extends React.Component {
   state = {
     posts: null,
@@ -50,6 +65,7 @@ class PostDetails extends React.Component {
 
   render() {
     console.log(this.props);
+    const user = getUser();
     if (this.state.posts !== null) {
       const singlePost = this.state.posts;
       console.log(singlePost);
@@ -103,13 +119,24 @@ class PostDetails extends React.Component {
                 </Paragraph>
               </UnorderedList>
             </Card>
-            <Button
-              className="details__btn"
-              appearance="primary"
-              onClick={this.renderOfferModule}
-            >
-              OFFER
-            </Button>
+            <Pane>
+              {user.id === singlePost.data.user_id ? (
+                <Button
+                  appearance={"danger"}
+                  margin={4}
+                  onClick={() => deletePost(singlePost.data.id)}
+                >
+                  Delete
+                </Button>
+              ) : null}
+              <Button
+                className="details__btn"
+                appearance="primary"
+                onClick={this.renderOfferModule}
+              >
+                OFFER
+              </Button>
+            </Pane>
             {this.state.display && (
               <OfferModule
                 posts={singlePost.data}
