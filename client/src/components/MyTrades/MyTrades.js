@@ -3,7 +3,7 @@ import axios from "axios";
 import { getToken } from "../../utils/auth";
 import backArrow from "../../assets/Icons/arrow_drop_down-24px.svg";
 import Select from "../Select/Select";
-import { Button, Pane, Heading, Textarea } from "evergreen-ui";
+import { Button, Pane, Heading, Li, Textarea } from "evergreen-ui";
 
 class MyTrades extends React.Component {
   state = {
@@ -28,10 +28,18 @@ class MyTrades extends React.Component {
       });
   }
   render() {
+    const myOffers = this.state.offers;
+    if (!myOffers) {
+      return <p>"Loading.."</p>;
+    }
     return (
       <Pane>
         <Heading>My Offers</Heading>
-        <Pane></Pane>
+        <Pane>
+          {myOffers.data.map((offer) => (
+            <Li key={offer.id}>{offer.seller_post_id}</Li>
+          ))}
+        </Pane>
       </Pane>
     );
   }
